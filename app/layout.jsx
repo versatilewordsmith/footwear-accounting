@@ -1,17 +1,17 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; // Must be 'next/navigation'
 import { createClient } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, Box, ShoppingCart, 
   MapPin, Banknote, Building2, FileText, LogOut 
 } from 'lucide-react';
 
-// Initialize Supabase inside the component file
+// Ensure this is OUTSIDE the function
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL, 
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '', 
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 );
 
 export default function RootLayout({ children }) {
