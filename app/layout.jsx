@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
                     <div className="hidden md:flex items-center gap-5">
                       <NavLink href="/" label="Home" />
                       <NavLink href="/inventory/status" label="Stock" />
+                      <NavLink href="/partners" label="Partners" />
                       <NavLink href="/recovery/new" label="Recovery" />
                       <NavLink href="/payments" label="Payments" />
                       <NavLink href="/inventory/in" label="Stock-In" />
@@ -72,6 +73,7 @@ export default function RootLayout({ children }) {
                       <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
                       <div className="grid grid-cols-3 gap-6 mb-8">
                         <MenuTile href="/tours" icon={<CalendarDays />} label="Tours" onClick={toggleMenu} />
+                        <MenuTile href="/partners" icon={<UserGroupIcon className="w-6 h-6" />} label="Partners" onClick={toggleMenu} />
                         <MenuTile href="/inventory/in" icon={<Plus />} label="Stock-In" onClick={toggleMenu} />
                         <MenuTile href="/payments" icon={<Building2 />} label="Payments" onClick={toggleMenu} />
                         <MenuTile href="/ledger" icon={<FileText />} label="Ledger" onClick={toggleMenu} />
