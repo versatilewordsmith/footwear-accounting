@@ -1,5 +1,5 @@
 "use client";
-export const dynamic = 'force-dynamic'; // This tells Vercel to skip static pre-rendering
+export const dynamic = 'force-dynamic';
 
 import React, { Suspense } from 'react';
 import Link from 'next/link';
@@ -7,14 +7,12 @@ import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, Box, ShoppingCart, 
-  MapPin, Banknote, Building2, FileText, LogOut 
+  Banknote, Building2, FileText, LogOut, Plus 
 } from 'lucide-react';
 
-// Initialize Supabase safely for build time
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co', 
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function RootLayout({ children }) {
   const router = useRouter();
@@ -22,11 +20,9 @@ export default function RootLayout({ children }) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    // Using window.location for a hard reset to clear all states
     window.location.href = '/login';
   };
 
-  // If we are on the login page, we might want a simpler layout
   const isLoginPage = pathname === '/login';
 
   return (
@@ -36,33 +32,26 @@ export default function RootLayout({ children }) {
           <div className="flex flex-col min-h-screen">
             
             {!isLoginPage && (
-              {/* Top Navigation Bar (Desktop) */}
               <nav className="bg-blue-800 text-white shadow-md sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4">
                   <div className="flex justify-between items-center h-16">
                     <div className="flex items-center space-x-4">
                       <span className="text-xl font-bold tracking-tight border-r pr-4 border-blue-700">FootwearPro</span>
                       
-                      {/* Main Menu Items */}
                       <div className="hidden md:flex space-x-4 items-center">
                         <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Home" />
-                        
-                        {/* Inventory Dropdown Style Grouping */}
                         <div className="h-6 w-px bg-blue-700 mx-1"></div>
-                        <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock Status" />
+                        <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock" />
                         <NavLink href="/inventory/in" icon={<Plus size={18}/>} label="Stock-In" />
-                        
                         <div className="h-6 w-px bg-blue-700 mx-1"></div>
-                        <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="New Sale" />
+                        <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="Sale" />
                         <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
-                        <NavLink href="/payments" icon={<Building2 size={18}/>} label="Supplier Pay" />
-                        
+                        <NavLink href="/payments" icon={<Building2 size={18}/>} label="Supplier" />
                         <div className="h-6 w-px bg-blue-700 mx-1"></div>
                         <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
                       </div>
                     </div>
                     
-                    {/* DESKTOP LOGOUT BUTTON */}
                     <div className="hidden md:block">
                       <button 
                         onClick={handleLogout}
@@ -85,7 +74,7 @@ export default function RootLayout({ children }) {
                  <MobileNavLink href="/" icon={<LayoutDashboard size={20}/>} label="Home" />
                  <MobileNavLink href="/inventory/status" icon={<Box size={20}/>} label="Stock" />
                  <MobileNavLink href="/sales/new" icon={<ShoppingCart size={20}/>} label="Sale" />
-                 <MobileNavLink href="/recovery/new" icon={<Banknote size={20}/>} label="Recovery" />
+                 <MobileNavLink href="/recovery/new" icon={<Banknote size={20}/>} label="Rec" />
                  <button onClick={handleLogout} className="flex flex-col items-center text-gray-500">
                     <LogOut size={20} />
                     <span className="text-[10px] mt-1 font-medium">Exit</span>
