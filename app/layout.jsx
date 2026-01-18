@@ -41,6 +41,7 @@ export default function RootLayout({ children }) {
                   <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock" />
                   <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="Sale" />
                   <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
+                  <NavLink href="/payments" icon={<Building2 size={18}/>} label="Payments" />
                   <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
                   
                   {/* DESKTOP LOGOUT BUTTON */}
