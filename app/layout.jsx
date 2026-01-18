@@ -25,6 +25,7 @@ export default function RootLayout({ children }) {
                   {/* 2. Added Recovery link for Desktop */}
                   <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
                   <NavLink href="/payments" icon={<Building2 size={18}/>} label="Payments" />
+                  <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
                   <NavLink href="/tour" icon={<MapPin size={18}/>} label="Tour Report" />
                 </div>
               </div>
