@@ -29,12 +29,12 @@ export default function RootLayout({ children }) {
         <Suspense fallback={<div className="p-10 text-center text-blue-600 font-bold">Loading FootwearPro...</div>}>
           <div className="flex flex-col min-h-screen">
             
-            {/* DESKTOP HEADER */}
+            {/* DESKTOP HEADER - Blue bar (Hidden on mobile) */}
             {!isLoginPage && (
               <nav className="bg-[#1e3a8a] text-white shadow-md sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
                   <div className="flex items-center gap-6">
-                    <span className="text-xl font-black tracking-tighter italic">FootwearPro</span>
+                    <span className="text-xl font-black tracking-tighter italic text-white">FootwearPro</span>
                     <div className="hidden md:flex items-center gap-5">
                       <NavLink href="/" label="Home" />
                       <NavLink href="/inventory/status" label="Stock" />
@@ -52,30 +52,23 @@ export default function RootLayout({ children }) {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <main className={`flex-grow container mx-auto px-4 py-8 ${!isLoginPage ? 'pb-24' : ''}`}>
+            <main className={`flex-grow container mx-auto px-4 py-8 ${!isLoginPage ? 'pb-24 md:pb-8' : ''}`}>
               {children}
             </main>
 
-              {/* MOBILE BOTTOM NAVIGATION - Hidden on tablets (md) and desktops (lg) */}
-              {!isLoginPage && (
-                <div 
-                  className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-[70px] z-[1000] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]"
-                  style={{
-                    // We keep only the positioning styles that Tailwind might miss 
-                    // but remove 'display: flex' from here so 'md:hidden' works.
-                  }}
-                >
-                   <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
-                   <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
-                   <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
-                   <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
-                   <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
-                      <LogOut size={22} />
-                      <span className="text-[10px] font-bold uppercase">Exit</span>
-                   </button>
-                </div>
-              )}
-            )} {/* Fixed: Changed from '}' to ')}' */}
+            {/* MOBILE BOTTOM NAVIGATION - Strictly hidden on md and lg screens */}
+            {!isLoginPage && (
+              <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-[70px] z-[1000] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+                 <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
+                 <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
+                 <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
+                 <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
+                 <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
+                    <LogOut size={22} />
+                    <span className="text-[10px] font-bold uppercase">Exit</span>
+                 </button>
+              </div>
+            )}
             
           </div>
         </Suspense>
@@ -84,7 +77,6 @@ export default function RootLayout({ children }) {
   );
 }
 
-// Sub-component for Desktop Links
 function NavLink({ href, label }) {
   return (
     <Link href={href} className="text-sm font-semibold text-blue-100 hover:text-white transition-colors">
@@ -93,10 +85,9 @@ function NavLink({ href, label }) {
   );
 }
 
-// Sub-component for Mobile Links
 function MobileLink({ href, icon, label }) {
   return (
-    <Link href={href} className="flex flex-col items-center gap-1 text-gray-500 active:text-blue-600 focus:text-blue-600">
+    <Link href={href} className="flex flex-col items-center gap-1 text-gray-500">
       {icon}
       <span className="text-[10px] font-bold uppercase">{label}</span>
     </Link>
