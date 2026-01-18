@@ -44,6 +44,7 @@ export default function RootLayout({ children }) {
                       <NavLink href="/payments" label="Payments" />
                       <NavLink href="/inventory/in" label="Stock-In" />
                       <NavLink href="/sales/new" label="Sale" />
+                      <NavLink href="/tours" label="Tours" />
                       <NavLink href="/ledger" label="Ledger" />
                     </div>
                   </div>
@@ -70,6 +71,7 @@ export default function RootLayout({ children }) {
                     >
                       <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
                       <div className="grid grid-cols-3 gap-6 mb-8">
+                        <MenuTile href="/tours" icon={<CalendarDays />} label="Tours" onClick={toggleMenu} />
                         <MenuTile href="/inventory/in" icon={<Plus />} label="Stock-In" onClick={toggleMenu} />
                         <MenuTile href="/payments" icon={<Building2 />} label="Payments" onClick={toggleMenu} />
                         <MenuTile href="/ledger" icon={<FileText />} label="Ledger" onClick={toggleMenu} />
