@@ -28,62 +28,26 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="bg-gray-100 text-gray-900 pb-20 md:pb-0">
-        <Suspense fallback={<div className="p-10 text-center">Loading FootwearPro...</div>}>
-          <div className="flex flex-col min-h-screen">
-            
-            {!isLoginPage && (
-              <nav className="bg-blue-800 text-white shadow-md sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="flex justify-between items-center h-16">
-                    <div className="flex items-center space-x-4">
-                      <span className="text-xl font-bold tracking-tight border-r pr-4 border-blue-700">FootwearPro</span>
-                      
-                      <div className="hidden md:flex space-x-4 items-center">
-                        <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Home" />
-                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
-                        <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock" />
-                        <NavLink href="/inventory/in" icon={<Plus size={18}/>} label="Stock-In" />
-                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
-                        <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="Sale" />
-                        <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
-                        <NavLink href="/payments" icon={<Building2 size={18}/>} label="Supplier" />
-                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
-                        <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
-                      </div>
-                    </div>
-                    
-                    <div className="hidden md:block">
-                      <button 
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition text-sm font-bold shadow-sm"
-                      >
-                        <LogOut size={16} /> Logout
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </nav>
-            )}
-
-            <main className="flex-grow container mx-auto px-4 py-6">
-              {children}
-            </main>
-
-            {!isLoginPage && (
-              <div className="md:hidden bg-white border-t border-gray-200 fixed bottom-0 w-full flex justify-around py-3 z-50 shadow-lg">
-                 <MobileNavLink href="/" icon={<LayoutDashboard size={20}/>} label="Home" />
-                 <MobileNavLink href="/inventory/status" icon={<Box size={20}/>} label="Stock" />
-                 <MobileNavLink href="/sales/new" icon={<ShoppingCart size={20}/>} label="Sale" />
-                 <MobileNavLink href="/recovery/new" icon={<Banknote size={20}/>} label="Rec" />
-                 <button onClick={handleLogout} className="flex flex-col items-center text-gray-500">
-                    <LogOut size={20} />
-                    <span className="text-[10px] mt-1 font-medium">Exit</span>
-                 </button>
+      <body className="bg-gray-50">
+        <div className="min-h-screen flex flex-col">
+          {/* Header */}
+          <nav className="bg-blue-900 text-white p-4 shadow-lg">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <h1 className="text-xl font-bold">FootwearPro</h1>
+              <div className="space-x-6 hidden md:flex">
+                 <Link href="/" className="hover:text-blue-200">Home</Link>
+                 <Link href="/inventory/status" className="hover:text-blue-200">Stock</Link>
+                 <Link href="/sales/new" className="hover:text-blue-200">Sale</Link>
               </div>
-            )}
-          </div>
-        </Suspense>
+              <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded-lg text-sm font-bold">Logout</button>
+            </div>
+          </nav>
+  
+          {/* Content Area */}
+          <main className="flex-grow max-w-7xl mx-auto w-full p-6">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
