@@ -58,32 +58,34 @@ export default function RootLayout({ children }) {
               {children}
             </main>
 
-            {/* MOBILE BOTTOM NAVIGATION - Forced with Inline Styles */}
-            {!isLoginPage && (
-              <div className="lg:hidden" style={{
+            {/* MOBILE BOTTOM NAVIGATION - Visible only on small screens (hidden on md and lg) */}
+            <div 
+              className="md:hidden" 
+              style={{
                 position: 'fixed',
                 bottom: 0,
                 left: 0,
                 right: 0,
                 backgroundColor: 'white',
                 borderTop: '1px solid #e5e7eb',
-                display: 'flex',
+                display: 'flex', 
                 justifyContent: 'space-around',
                 alignItems: 'center',
                 height: '70px',
                 zIndex: 1000,
                 boxShadow: '0 -4px 10px rgba(0,0,0,0.05)'
-              }}>
-                 <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
-                 <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
-                 <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
-                 <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
-                 <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
-                    <LogOut size={22} />
-                    <span className="text-[10px] font-bold uppercase">Exit</span>
-                 </button>
-              </div>
-            )}
+              }}
+            >
+               <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
+               <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
+               <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
+               <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
+               <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
+                  <LogOut size={22} />
+                  <span className="text-[10px] font-bold uppercase">Exit</span>
+               </button>
+            </div>
+          }
           </div>
         </Suspense>
       </body>
