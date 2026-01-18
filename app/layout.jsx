@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
                   <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Dashboard" />
                   <NavLink href="/inventory/new" icon={<Box size={18}/>} label="Inventory" />
                   <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock Levels" />
+                  <NavLink href="/inventory/in" icon={<Plus size={18}/>} label="Stock-In" />
                   <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="New Sale" />
                   {/* 2. Added Recovery link for Desktop */}
                   <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
