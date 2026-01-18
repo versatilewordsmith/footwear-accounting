@@ -75,14 +75,13 @@ export default function WeeklyTourPlan() {
         ))}
       </div>
     </div>
+      {/* Floating Action Button (FAB) */}
+      <div className="fixed bottom-24 right-6 z-50">
+        <Link href="/tours/manage">
+          <button className="bg-[#1e3a8a] text-white p-5 rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center border-4 border-white">
+            <Plus size={28} strokeWidth={3} />
+          </button>
+        </Link>
+      </div>
   );
 }
-
-{/* Floating Action Button (FAB) */}
-<div className="fixed bottom-24 right-6 z-50">
-  <Link href="/tours/manage">
-    <button className="bg-[#1e3a8a] text-white p-5 rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center border-4 border-white">
-      <Plus size={28} strokeWidth={3} />
-    </button>
-  </Link>
-</div>
