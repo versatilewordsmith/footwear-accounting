@@ -36,22 +36,37 @@ export default function RootLayout({ children }) {
           <div className="flex flex-col min-h-screen">
             
             {!isLoginPage && (
+              {/* Top Navigation Bar (Desktop) */}
               <nav className="bg-blue-800 text-white shadow-md sticky top-0 z-50">
-                <div className="max-w-6xl mx-auto px-4">
+                <div className="max-w-7xl mx-auto px-4">
                   <div className="flex justify-between items-center h-16">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xl font-bold tracking-tight">FootwearPro</span>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-bold tracking-tight border-r pr-4 border-blue-700">FootwearPro</span>
+                      
+                      {/* Main Menu Items */}
+                      <div className="hidden md:flex space-x-4 items-center">
+                        <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Home" />
+                        
+                        {/* Inventory Dropdown Style Grouping */}
+                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
+                        <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock Status" />
+                        <NavLink href="/inventory/in" icon={<Plus size={18}/>} label="Stock-In" />
+                        
+                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
+                        <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="New Sale" />
+                        <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
+                        <NavLink href="/payments" icon={<Building2 size={18}/>} label="Supplier Pay" />
+                        
+                        <div className="h-6 w-px bg-blue-700 mx-1"></div>
+                        <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
+                      </div>
                     </div>
                     
-                    <div className="hidden md:flex space-x-6 items-center">
-                      <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Home" />
-                      <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock" />
-                      <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="Sale" />
-                      <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
-                      <NavLink href="/ledger" icon={<FileText size={18}/>} label="Ledger" />
+                    {/* DESKTOP LOGOUT BUTTON */}
+                    <div className="hidden md:block">
                       <button 
                         onClick={handleLogout}
-                        className="flex items-center gap-1 bg-blue-700 hover:bg-red-600 px-3 py-1.5 rounded-lg transition text-sm"
+                        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl transition text-sm font-bold shadow-sm"
                       >
                         <LogOut size={16} /> Logout
                       </button>
