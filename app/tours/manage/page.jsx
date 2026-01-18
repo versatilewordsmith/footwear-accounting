@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { MapPin, Plus, Trash2, Save, GripVertical, ChevronLeft } from 'lucide-react';
+import { MapPin, Plus, Trash2, Save, ChevronLeft, ArrowUp, ArrowDown, RefreshCcw } from 'lucide-react';
 import Link from 'next/link';
 
 const supabase = createClient(
@@ -11,24 +11,58 @@ const supabase = createClient(
 
 export default function ManageTourPlan() {
   const [cities, setCities] = useState([]);
-  const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // State for the "New/Edit Plan" form
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [officerName, setOfficerName] = useState('');
-  const [selectedStops, setSelectedStops] = useState([]); // Array of city objects
+  const [selectedStops, setSelectedStops] = useState([]);
 
   useEffect(() => {
-    fetchInitialData();
-  }, []);
+    fetchCities();
+    loadExistingRoute(selectedDay);
+  }, [selectedDay]);
 
-  async function fetchInitialData() {
-    const { data: cityData } = await supabase.from('cities').select('*').order('name');
-    const { data: routeData } = await supabase.from('routes').select('*, route_cities(city_id)');
-    setCities(cityData || []);
-    setRoutes(routeData || []);
+  async function fetchCities() {
+    const { data } = await supabase.from('cities').select('*').order('name');
+    setCities(data || []);
   }
+
+  // FUNCTION TO ALTER/LOAD EXISTING PLAN
+  async function loadExistingRoute(day) {
+    setLoading(true);
+    const { data: route } = await supabase
+      .from('routes')
+      .select(`*, route_cities(visit_order, cities(*))`)
+      .eq('day_of_week', day)
+      .single();
+
+    if (route) {
+      setOfficerName(route.officer_name);
+      // Sort by visit_order and extract city objects
+      const sortedStops = route.route_cities
+        .sort((a, b) => a.visit_order - b.visit_order)
+        .map(rc => rc.cities);
+      setSelectedStops(sortedStops);
+    } else {
+      setOfficerName('');
+      setSelectedStops([]);
+    }
+    setLoading(false);
+  }
+
+  // RE-ARRANGE FUNCTIONS
+  const moveUp = (index) => {
+    if (index === 0) return;
+    const newStops = [...selectedStops];
+    [newStops[index], newStops[index - 1]] = [newStops[index - 1], newStops[index]];
+    setSelectedStops(newStops);
+  };
+
+  const moveDown = (index) => {
+    if (index === selectedStops.length - 1) return;
+    const newStops = [...selectedStops];
+    [newStops[index], newStops[index + 1]] = [newStops[index + 1], newStops[index]];
+    setSelectedStops(newStops);
+  };
 
   const addCityToRoute = (cityId) => {
     const city = cities.find(c => c.id === parseInt(cityId));
@@ -37,90 +71,76 @@ export default function ManageTourPlan() {
     }
   };
 
-  const removeCity = (cityId) => {
-    setSelectedStops(selectedStops.filter(s => s.id !== cityId));
-  };
-
   const saveRoutePlan = async () => {
-    if (!officerName || selectedStops.length === 0) return alert("Please fill all details");
     setLoading(true);
-
-    // 1. Create/Update the Route Header
-    const { data: routeHeader, error: hError } = await supabase
+    // 1. Update/Insert Header
+    const { data: routeHeader } = await supabase
       .from('routes')
-      .upsert({ officer_name: officerName, day_of_week: selectedDay, route_name: `${selectedDay} Route` })
-      .select()
-      .single();
+      .upsert({ officer_name: officerName, day_of_week: selectedDay, route_name: `${selectedDay} Route` }, { onConflict: 'day_of_week' })
+      .select().single();
 
-    if (!hError) {
-      // 2. Clear old stops and Insert new ones
-      await supabase.from('route_cities').delete().eq('route_id', routeHeader.id);
-      
-      const stopsToInsert = selectedStops.map((city, index) => ({
-        route_id: routeHeader.id,
-        city_id: city.id,
-        visit_order: index + 1
-      }));
+    // 2. Clear and Replace Stops
+    await supabase.from('route_cities').delete().eq('route_id', routeHeader.id);
+    const stopsToInsert = selectedStops.map((city, index) => ({
+      route_id: routeHeader.id, city_id: city.id, visit_order: index + 1
+    }));
 
-      const { error: sError } = await supabase.from('route_cities').insert(stopsToInsert);
-      if (!sError) {
-        alert("Plan Updated Successfully!");
-        window.location.href = '/tours';
-      }
-    }
+    await supabase.from('route_cities').insert(stopsToInsert);
+    alert("Route Plan Altered Successfully!");
     setLoading(false);
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 pb-24 px-4">
-      <div className="flex items-center gap-4 py-4">
-        <Link href="/tours" className="p-2 bg-gray-100 rounded-xl text-gray-600"><ChevronLeft /></Link>
-        <h1 className="text-2xl font-black text-gray-900">Route Designer</h1>
+    <div className="max-w-2xl mx-auto pb-24 px-4">
+      <div className="flex items-center justify-between py-6">
+        <Link href="/tours" className="p-2 bg-gray-100 rounded-xl"><ChevronLeft /></Link>
+        <h1 className="text-xl font-black">Alter Route Design</h1>
+        <div className="w-10"></div>
       </div>
 
-      <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl space-y-6">
-        {/* Step 1: Basic Info */}
+      <div className="bg-white p-6 rounded-[2.5rem] shadow-xl border border-gray-100 space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Visit Day</label>
+            <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Select Day to Edit</label>
             <select value={selectedDay} onChange={e => setSelectedDay(e.target.value)}
-              className="w-full p-4 bg-gray-50 rounded-2xl font-bold border-none outline-none ring-2 ring-transparent focus:ring-blue-500 transition-all">
+              className="w-full p-4 bg-blue-50 text-blue-700 rounded-2xl font-black outline-none">
               {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(d => <option key={d}>{d}</option>)}
             </select>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Officer Name</label>
-            <input value={officerName} onChange={e => setOfficerName(e.target.value)} placeholder="e.g. Zubair"
-              className="w-full p-4 bg-gray-50 rounded-2xl font-bold border-none outline-none ring-2 ring-transparent focus:ring-blue-500 transition-all" />
+            <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Officer</label>
+            <input value={officerName} onChange={e => setOfficerName(e.target.value)} 
+              className="w-full p-4 bg-gray-50 rounded-2xl font-bold outline-none" placeholder="Officer Name" />
           </div>
         </div>
 
-        {/* Step 2: Add Cities */}
         <div className="space-y-1">
-          <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Add Cities to Route</label>
-          <select onChange={(e) => addCityToRoute(e.target.value)}
-            className="w-full p-4 bg-blue-50 text-blue-700 rounded-2xl font-bold border-none outline-none">
-            <option value="">Select a city to add...</option>
-            {cities.map(city => <option key={city.id} value={city.id}>{city.name}</option>)}
+          <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Add New Stop</label>
+          <select onChange={(e) => addCityToRoute(e.target.value)} className="w-full p-4 bg-gray-50 rounded-2xl font-bold outline-none">
+            <option value="">Choose City...</option>
+            {cities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </div>
 
-        {/* Step 3: Arrange stops */}
         <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase text-gray-400 ml-2">Stop Sequence</label>
+          <p className="text-[10px] font-black uppercase text-gray-400 ml-2">Route Sequence (Re-arrange)</p>
           {selectedStops.map((city, index) => (
-            <div key={city.id} className="flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-2xl shadow-sm group">
-              <span className="w-8 h-8 flex items-center justify-center bg-blue-600 text-white rounded-lg font-black text-xs">{index + 1}</span>
+            <div key={city.id} className="flex items-center gap-2 p-3 bg-white border border-gray-100 rounded-2xl shadow-sm">
+              <div className="flex flex-col gap-1">
+                <button onClick={() => moveUp(index)} className="text-gray-300 hover:text-blue-600"><ArrowUp size={14}/></button>
+                <button onClick={() => moveDown(index)} className="text-gray-300 hover:text-blue-600"><ArrowDown size={14}/></button>
+              </div>
+              <span className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-lg font-black text-[10px]">{index + 1}</span>
               <span className="font-bold text-gray-700 flex-grow">{city.name}</span>
-              <button onClick={() => removeCity(city.id)} className="text-gray-300 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+              <button onClick={() => setSelectedStops(selectedStops.filter(s => s.id !== city.id))} className="text-red-300 p-2"><Trash2 size={16} /></button>
             </div>
           ))}
-          {selectedStops.length === 0 && <p className="text-center text-gray-400 py-8 italic">No cities added yet.</p>}
         </div>
 
-        <button disabled={loading} onClick={saveRoutePlan}
-          className="w-full py-5 bg-[#1e3a8a] text-white rounded-[1.5rem] font-black shadow-xl flex items-center justify-center gap-2 hover:bg-blue-800 transition-all">
-          <Save size={20} /> {loading ? 'Saving Plan...' : 'Save Weekly Plan'}
+        <button onClick={saveRoutePlan} disabled={loading}
+          className="w-full py-5 bg-[#1e3a8a] text-white rounded-2xl font-black shadow-lg flex items-center justify-center gap-2 uppercase tracking-widest">
+          {loading ? <RefreshCcw className="animate-spin" /> : <Save size={20} />}
+          Update Route Plan
         </button>
       </div>
     </div>
