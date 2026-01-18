@@ -87,7 +87,7 @@ export default function Home() {
           <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-10 text-center">
             <p className="text-gray-400">Enjoy your day! No customers are scheduled for today's city.</p>
             <p></p>
-            <p className="text-gray-400">For feedback & queries, please contact us:</br><b>Versatile Webworks, Lahore WhatsApp +92 342-4021533</b></p>
+            <p className="text-gray-400">For feedback & queries, please contact us:<b>Versatile Webworks, Lahore. WhatsApp +92 342-4021533</b></p>
           </div>
         )}
       </section>
