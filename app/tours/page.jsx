@@ -31,7 +31,7 @@ export default function WeeklyTourPlan() {
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-24">
       <header className="px-2">
-        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Weekly Beat Plan</h1>
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Weekly Tour Plan</h1>
         <p className="text-gray-500 font-medium">Fixed routing for sales officers</p>
       </header>
 
