@@ -39,6 +39,7 @@ export default function RootLayout({ children }) {
                 <div className="hidden md:flex space-x-6 items-center">
                   <NavLink href="/" icon={<LayoutDashboard size={18}/>} label="Home" />
                   <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock" />
+                  <NavLink href="/inventory/status" icon={<Box size={18}/>} label="Stock Levels" />
                   <NavLink href="/sales/new" icon={<ShoppingCart size={18}/>} label="Sale" />
                   <NavLink href="/recovery/new" icon={<Banknote size={18}/>} label="Recovery" />
                   <NavLink href="/payments" icon={<Building2 size={18}/>} label="Payments" />
