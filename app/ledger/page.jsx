@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { Search, FileText, Printer, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
