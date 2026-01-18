@@ -1,38 +1,45 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
-export async function middleware(req) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+export async function middleware(request) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-  // Check if we have a session (is the user logged in?)
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() { return request.cookies.getAll() },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          response = NextResponse.next({ request })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
 
-  // 1. If user is NOT logged in and trying to access a protected page
-  if (!session && req.nextUrl.pathname !== '/login') {
-    return NextResponse.redirect(new URL('/login', req.url))
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Protect all pages except /login
+  if (!user && request.nextUrl.pathname !== '/login') {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // 2. If user IS logged in and trying to access the login page
-  if (session && req.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/', req.url))
+  // Prevent logged-in users from going to /login
+  if (user && request.nextUrl.pathname === '/login') {
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
-  return res
+  return response
 }
 
-// This "matcher" tells Next.js which pages to protect
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }
