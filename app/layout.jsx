@@ -56,34 +56,25 @@ export default function RootLayout({ children }) {
               {children}
             </main>
 
-            {/* MOBILE BOTTOM NAVIGATION - Visible only on small screens and NOT on login page */}
-            {!isLoginPage && (
-              <div 
-                className="md:hidden" 
-                style={{
-                  position: 'fixed',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  backgroundColor: 'white',
-                  borderTop: '1px solid #e5e7eb',
-                  display: 'flex', 
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                  height: '70px',
-                  zIndex: 1000,
-                  boxShadow: '0 -4px 10px rgba(0,0,0,0.05)'
-                }}
-              >
-                 <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
-                 <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
-                 <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
-                 <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
-                 <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
-                    <LogOut size={22} />
-                    <span className="text-[10px] font-bold uppercase">Exit</span>
-                 </button>
-              </div>
+              {/* MOBILE BOTTOM NAVIGATION - Hidden on tablets (md) and desktops (lg) */}
+              {!isLoginPage && (
+                <div 
+                  className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-[70px] z-[1000] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]"
+                  style={{
+                    // We keep only the positioning styles that Tailwind might miss 
+                    // but remove 'display: flex' from here so 'md:hidden' works.
+                  }}
+                >
+                   <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
+                   <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
+                   <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
+                   <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
+                   <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-500">
+                      <LogOut size={22} />
+                      <span className="text-[10px] font-bold uppercase">Exit</span>
+                   </button>
+                </div>
+              )}
             )} {/* Fixed: Changed from '}' to ')}' */}
             
           </div>
