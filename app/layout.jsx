@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
                 <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
                   <div className="flex items-center gap-6">
                     <span className="text-xl font-black tracking-tighter italic">FootwearPro</span>
-                    <div className="hidden lg:flex items-center gap-5">
+                    <div className="hidden md:flex items-center gap-5">
                       <NavLink href="/" label="Home" />
                       <NavLink href="/inventory/status" label="Stock" />
                       <NavLink href="/inventory/in" label="Stock-In" />
