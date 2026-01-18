@@ -44,6 +44,7 @@ export default function RootLayout({ children }) {
                       <NavLink href="/sales/new" label="Sale" />
                       <NavLink href="/recovery/new" label="Recovery" />
                       <NavLink href="/ledger" label="Ledger" />
+                      <NavLink href="/payments" label="Payments" />
                     </div>
                   </div>
                   <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-bold transition-colors">
