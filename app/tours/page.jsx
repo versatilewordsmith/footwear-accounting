@@ -1,4 +1,6 @@
 "use client";
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { MapPin, User, ArrowRight, CalendarDays } from 'lucide-react';
@@ -29,12 +31,11 @@ export default function WeeklyTourPlan() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-24">
-      <header className="px-2">
-        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Weekly Tour Plan</h1>
-        <p className="text-gray-500 font-medium">Fixed routing for sales officers</p>
-      </header>
-
+      <div className="max-w-4xl mx-auto space-y-6 pb-24 px-2">
+        <header>
+          <h1 className="text-3xl font-black text-gray-900">Weekly Beat Plan</h1>
+        </header>
+      
       <div className="space-y-4">
         {routes.map((route) => (
           <div key={route.id} className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm">
@@ -74,14 +75,14 @@ export default function WeeklyTourPlan() {
           </div>
         ))}
       </div>
-            {/* Floating Action Button (FAB) */}
-            <div className="fixed bottom-24 right-6 z-50">
-              <Link href="/tours/manage">
-                <button className="bg-[#1e3a8a] text-white p-5 rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center border-4 border-white">
-                  <Plus size={28} strokeWidth={3} />
-                </button>
-              </Link>
-            </div>
+        {/* Floating Action Button (FAB) */}
+        <div className="fixed bottom-24 right-6 z-50">
+          <Link href="/tours/manage">
+            <button className="bg-[#1e3a8a] text-white p-5 rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center border-4 border-white">
+              <Plus size={28} strokeWidth={3} />
+            </button>
+          </Link>
+        </div>
     </div>
   );
 }
