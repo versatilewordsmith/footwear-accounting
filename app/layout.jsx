@@ -40,11 +40,11 @@ export default function RootLayout({ children }) {
                     <div className="hidden md:flex items-center gap-5">
                       <NavLink href="/" label="Home" />
                       <NavLink href="/inventory/status" label="Stock" />
+                      <NavLink href="/recovery/new" label="Recovery" />
+                      <NavLink href="/payments" label="Payments" />
                       <NavLink href="/inventory/in" label="Stock-In" />
                       <NavLink href="/sales/new" label="Sale" />
-                      <NavLink href="/recovery/new" label="Recovery" />
                       <NavLink href="/ledger" label="Ledger" />
-                      <NavLink href="/payments" label="Payments" />
                     </div>
                   </div>
                   <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-bold transition-colors">
@@ -71,8 +71,8 @@ export default function RootLayout({ children }) {
                       <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
                       <div className="grid grid-cols-3 gap-6 mb-8">
                         <MenuTile href="/inventory/in" icon={<Plus />} label="Stock-In" onClick={toggleMenu} />
-                        <MenuTile href="/ledger" icon={<FileText />} label="Ledger" onClick={toggleMenu} />
                         <MenuTile href="/payments" icon={<Building2 />} label="Payments" onClick={toggleMenu} />
+                        <MenuTile href="/ledger" icon={<FileText />} label="Ledger" onClick={toggleMenu} />
                       </div>
                       <button 
                         onClick={handleLogout}
@@ -88,8 +88,8 @@ export default function RootLayout({ children }) {
                 <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-[75px] z-[1000] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
                    <MobileLink href="/" icon={<LayoutDashboard size={22}/>} label="Home" />
                    <MobileLink href="/inventory/status" icon={<Box size={22}/>} label="Stock" />
+                   <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Receipt" />
                    <MobileLink href="/sales/new" icon={<ShoppingCart size={22}/>} label="Sale" />
-                   <MobileLink href="/recovery/new" icon={<Banknote size={22}/>} label="Rec" />
                    <button onClick={toggleMenu} className="flex flex-col items-center gap-1 text-gray-500">
                       {isMoreMenuOpen ? <X size={22} className="text-blue-600" /> : <MoreHorizontal size={22} />}
                       <span className="text-[10px] font-bold uppercase">More</span>
